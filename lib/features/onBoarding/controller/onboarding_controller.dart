@@ -16,8 +16,4 @@ class OnboardingController extends ChangeNotifier {
     }
     notifyListeners();
   }
-
 }
-
-// وصلنا عند الجزء 6
-

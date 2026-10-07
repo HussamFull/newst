@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newst/core/datasource/local_source/preference_manager.dart';
 import 'package:newst/features/auth/screen/login_screen.dart';
+import 'package:newst/features/auth/screen/register_screen.dart';
 import 'package:newst/features/onBoarding/controller/onboarding_controller.dart';
 import 'package:newst/features/onBoarding/model/onboarding_model.dart';
 import 'package:provider/provider.dart';
@@ -14,19 +15,14 @@ class OnBoardingScreen extends StatelessWidget {
     final preferenceManager = PreferenceManager();
 
     // Save onboarding completed flag
-    await preferenceManager.setBoolean(
-      'onboarding_completed',
-      true,
-    );
+    await preferenceManager.setBoolean('onboarding_completed', true);
 
     // Navigate to Login Screen
     if (!context.mounted) return;
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const RegisterScreen()),
     );
   }
 
@@ -50,11 +46,7 @@ class OnBoardingScreen extends StatelessWidget {
 
               actions: [
                 Consumer<OnboardingController>(
-                  builder: (
-                    context,
-                    value,
-                    child,
-                  ) {
+                  builder: (context, value, child) {
                     return value.isLastPage
                         ? const SizedBox.shrink()
                         : TextButton(
@@ -91,21 +83,17 @@ class OnBoardingScreen extends StatelessWidget {
                       controller: controller.pageController,
 
                       onPageChanged: (int index) {
-                        context
-                            .read<OnboardingController>()
-                            .onPageChanged(index);
+                        context.read<OnboardingController>().onPageChanged(
+                          index,
+                        );
                       },
 
                       // IMPORTANT:
                       // Make sure your model uses the same name.
                       itemCount: OnboardingModel.onboardingList.length,
 
-                      itemBuilder: (
-                        context,
-                        index,
-                      ) {
-                        final model =
-                            OnboardingModel.onboardingList[index];
+                      itemBuilder: (context, index) {
+                        final model = OnboardingModel.onboardingList[index];
 
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -161,11 +149,7 @@ class OnBoardingScreen extends StatelessWidget {
                   // PAGE INDICATOR
                   // =========================
                   Consumer<OnboardingController>(
-                    builder: (
-                      context,
-                      value,
-                      child,
-                    ) {
+                    builder: (context, value, child) {
                       return SmoothPageIndicator(
                         controller: value.pageController,
 
@@ -188,11 +172,7 @@ class OnBoardingScreen extends StatelessWidget {
                   // NEXT / GET STARTED BUTTON
                   // =========================
                   Consumer<OnboardingController>(
-                    builder: (
-                      context,
-                      value,
-                      child,
-                    ) {
+                    builder: (context, value, child) {
                       return SizedBox(
                         width: double.infinity,
                         height: 52,
@@ -202,29 +182,23 @@ class OnBoardingScreen extends StatelessWidget {
                               _onFinish(context);
                             } else {
                               controller.pageController.nextPage(
-                                duration: const Duration(
-                                  milliseconds: 300,
-                                ),
+                                duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOut,
                               );
                             }
                           },
 
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color(0xFFC53030),
+                            backgroundColor: const Color(0xFFC53030),
                             foregroundColor: Colors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
 
                           child: Text(
-                            value.isLastPage
-                                ? 'Get Started'
-                                : 'Next',
+                            value.isLastPage ? 'Get Started' : 'Next',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

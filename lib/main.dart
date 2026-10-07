@@ -3,7 +3,6 @@ import 'package:newst/core/datasource/local_source/preference_manager.dart';
 import 'package:newst/features/splash/splash_screen.dart';
 
 Future<void> main() async {
-  // Required before using plugins such as SharedPreferences
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize PreferenceManager

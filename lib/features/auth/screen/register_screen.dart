@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:newst/core/datasource/local_source/preference_manager.dart';
 import 'package:newst/core/widget/custom_text_form_feild.dart';
 import 'package:newst/features/auth/screen/login_screen.dart';
+import 'package:newst/features/home/screen/home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -21,11 +22,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool isLoading = false;
 
-  void register() async {
+ Future<void> register() async {
+
+
     setState(() {
       errorMessage = null;
       isLoading = true;
     });
+
+
+
 
     final savedEmail = PreferenceManager().getString('user_email');
     if (savedEmail != null && savedEmail == emailController.text.trim()) {
@@ -42,16 +48,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
       // await PreferenceManager().setString('user_confirm_password', confirmPasswordController.text);
       // await PreferenceManager().setBoolean('onboarding_completed', true);
-      await PreferenceManager().setBoolean('is_log_in', true);
 
-      Navigator.pushReplacement(
+
+
+// Save the user_registered flag لاحقا مشان الدخول   وتسجيل الخروج كمان   
+      await PreferenceManager().setBoolean(
+          'user_registered',
+          true,
+        );
+
+
+
+      await PreferenceManager().setBoolean('is_logged_in', true);
+
+
+
+
+
+        
+
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
-
+        MaterialPageRoute(builder: (context) => const HomeScreen()
+      ),
+       (route) => false,
+  );
       // Navigate to the next screen or perform any other action
     }
   }
+
+
+
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,13 +147,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                       );
 
-                      if (!emailRegex.hasMatch(value)) {
+                      if (!emailRegex.hasMatch(email)) {
                         return 'Please enter a valid email address';
                       }
 
                       return null;
                     },
-                    // maxLines: 1,
+                     maxLines: 1,
                   ),
 
                   // Display error message if it exists
@@ -156,7 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     },
 
-                    // maxLines: 1,
+                     maxLines: 1,
                   ),
 
                   SizedBox(height: 16),
@@ -166,7 +199,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: confirmPasswordController,
                     obscureText: true,
                     hintText: 'Confirm your password',
-                    // maxLines: 1,
+                     maxLines: 1,
+
+
+                    validator: (value) {
+  if (value == null || value.trim().isEmpty) {
+    return 'Please confirm your password';
+  }
+
+  if (value.trim() != passwordController.text.trim()) {
+    return 'Passwords do not match';
+  }
+
+  return null;
+},
+
+
                   ),
 
                   SizedBox(height: 24),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:newst/core/datasource/local_source/preference_manager.dart';
+import 'package:newst/features/home/screen/home_screen.dart';
 import 'package:newst/features/splash/splash_screen.dart';
+import 'dart:convert';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
 
-      home: const SplashScreen(),
+     // home: const SplashScreen(),
+      home: const HomeScreen(),
     );
   }
 }

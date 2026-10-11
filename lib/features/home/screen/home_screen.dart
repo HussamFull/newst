@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:newst/core/datasource/local_source/preference_manager.dart';
 import 'package:newst/features/auth/screen/login_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:newst/features/home/model/home_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,42 +14,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  List<dynamic> list = [];
-
-
-
+  // List<HomeModel> list = [];
+  List<ArticleModel> list = [];
 
   @override
   void initState() {
-    callEndpoint();
     super.initState();
+    callTop();
   }
 
-  Future<void> callEndpoint() async {
+  Future<void> callTop() async {
     var urlForTopHeadlines = Uri.https('newsapi.org', '/v2/top-headlines', {
       'apiKey': 'bfb87654ac474a14b20e54c7d4522c6a',
       'country': 'us',
     });
+
+
+
+
+
+
+
+
+
 
     final http.Response response = await http.get(urlForTopHeadlines);
 
     Map<String, dynamic> result =
         jsonDecode(response.body) as Map<String, dynamic>;
 
-        setState(() {
-          list = result['articles'] as List<dynamic>;
-        });
+    setState(() {
+      list = (result['articles'] as List<dynamic>)
+          .map((e) => ArticleModel.fromJson(e))
+          .toList();
+    });
 
     ///print('Response from API: $result[totalResults]');
-
-
-
-
-
-
-
-
 
     final preferenceManager = PreferenceManager();
 
@@ -79,6 +80,34 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+
+  callEveryThing() async {
+    var urlForEveryThing = Uri.https('newsapi.org', '/v2/everything', {
+      'apiKey': 'bfb87654ac474a14b20e54c7d4522c6a',
+      'q': 'tesla',
+    });
+
+    final http.Response response = await http.get(urlForEveryThing);
+
+    Map<String, dynamic> result =
+        jsonDecode(response.body) as Map<String, dynamic>;
+
+    setState(() {
+      list = (result['articles'] as List<dynamic>)
+          .map((e) => ArticleModel.fromJson(e))
+          .toList();
+    });
+
+   ///print('Response from API: $result[totalResults]');
+  }
+
+
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,22 +120,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
       body: Column(
         children: [
-          Expanded(
 
+          Expanded(
             child: ListView.builder(
               itemCount: list.length,
               itemBuilder: (context, index) {
                 final article = list.length > index ? list[index] : null;
                 return ListTile(
-                  title: Text(article?['title'] ?? 'No Title'),
-                  subtitle: Text(article?['description'] ?? 'No Description'),
+                  title: Text(article?.title ?? 'No Title'),
+                  subtitle: Text(article?.description ?? 'No Description'),
                 );
               },
             ),
           ),
         ],
       ),
-   /*
+      /*
       const Center(
         child: Text(
           'Welcome to Newst App!',

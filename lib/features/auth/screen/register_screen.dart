@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:newst/core/constants/app_size.dart';
 import 'package:newst/core/datasource/local_source/preference_manager.dart';
 import 'package:newst/core/widget/custom_text_form_feild.dart';
 import 'package:newst/features/auth/screen/login_screen.dart';
 import 'package:newst/features/home/screen/home_screen.dart';
+
+
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -222,7 +227,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   SizedBox(
                     width: double.infinity,
-                    height: 48,
+                    height: 48.h,
                     child: ElevatedButton(
                       onPressed: () {
                         if (_Key.currentState?.validate() ?? false) {
@@ -239,12 +244,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Already have an account?',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: AppSize.sp16,
                           fontWeight: FontWeight.w400,
-                          color: Color(0xFF141414),
+                          color: const Color(0xFF141414),
                         ),
                       ),
                       TextButton(

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:newst/core/enums/request_state_enum.dart';
+import 'package:newst/core/mixins/safe_notify.dart';
 import 'package:newst/features/home/model/home_model.dart';
 import 'package:newst/features/home/repo/new_repo.dart';
 
-class HomeController extends ChangeNotifier {
+
+class HomeController extends ChangeNotifier with SafeNotify {
 
   HomeController({  required this.newRepo}) {
     getTopHeadLine();
     getEveryThing();
   }
+
+  bool isDisposed = false;
 
   RequestStateEnum topHeadlinesStatus = RequestStateEnum.loading;
   RequestStateEnum everyThingStatus = RequestStateEnum.loading;
@@ -28,7 +32,8 @@ class HomeController extends ChangeNotifier {
 
     try {
       topHeadlinesStatus = RequestStateEnum.loading;
-      notifyListeners();
+      notify();
+
       newTopHeadlines =await newRepo.getTopHeadlines(selectedCategory: selectedCategory);
       topHeadlinesStatus = RequestStateEnum.loaded;
       errorMessage = null;
@@ -38,7 +43,7 @@ class HomeController extends ChangeNotifier {
       topHeadlinesStatus = RequestStateEnum.error;
     }
 
-    notifyListeners();
+    notify();
   }
 
   void getEveryThing({ String? query}) async {
@@ -57,14 +62,10 @@ class HomeController extends ChangeNotifier {
       everyThingStatus = RequestStateEnum.error;
     }
 
-    notifyListeners();
+    notify();
   }
 
  
 }
 
 
-
-/// وصلنا عند الج
-///زء 3  6 min 
-/// 
